@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube Audio Download Studio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, 'Microsoft JhengHei', sans-serif;
+            background-color: #fbe0b0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #fbe0b0;
+            width: 700px;
+            height: 500px;
+            position: relative;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            color: #1f1213;
+            margin-top: 0;
+        }
+
+        .url-input {
+            width: 600px;
+            height: 30px;
+            margin: 25px auto 0;
+            display: block;
+            font-size: 20px;
+            color: #1f1213;
+            background-color: #efede8;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+
+        .url-display {
+            width: 600px;
+            min-height: 50px;
+            margin: 2px auto;
+            padding: 2px;
+            font-size: 20px;
+            color: rgb(98, 98, 98);
+            background-color: #ffdc54;
+            border: 2px solid #000000;
+            border-radius: 5px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        .download-btn {
+            width: 130px;
+            height: 30px;
+            display: block;
+            margin: 10px auto;
+            padding-bottom: 5%;
+            color: #FFFFFF;
+            background-color: #79861e;
+            font-size: 20px;
+            /* font-weight: bold; */
+            border: 2px solid #5a6610;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .download-btn:hover {
+            background-color: #b6d7a8;
+            color: #f00;
+        }
+
+        .download-btn:disabled {
+            background-color: #ccc;
+            border-color: #999;
+            cursor: not-allowed;
+            color: #666;
+        }
+
+        .info-box {
+            width: 600px;
+            height: 280px;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: black;
+            background-color: #efede8;
+            border: 2px solid #79861e;
+            border-radius: 15px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .info-box.error {
+            color: red;
+        }
+
+        .loading {
+            color: #79861e;
+        }
+
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">下載Youtube音樂，建議影片長度不要大於6分鐘</h1>
+        
+        <input 
+            type="text" 
+            id="urlInput" 
+            class="url-input" 
+            placeholder="https://www.youtube.com/"
+            value="https://www.youtube.com/"
+        >
+        
+        <div id="urlDisplay" class="url-display">https://www.youtube.com/</div>
+        
+        <button id="downloadBtn" class="download-btn">下載此音樂</button>
+        
+        <div id="infoBox" class="info-box">~下載音樂的相關資訊下載後會顯示在這裡~</div>
+    </div>
+
+    <script>
+        const urlInput = document.getElementById('urlInput');
+        const urlDisplay = document.getElementById('urlDisplay');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const infoBox = document.getElementById('infoBox');
+
+        // Update URL display when input changes
+        urlInput.addEventListener('input', function() {
+            urlDisplay.textContent = this.value;
+        });
+
+        // Handle download button click
+        downloadBtn.addEventListener('click', async function() {
+            const url = urlInput.value.trim();
+            
+            if (!url || url === 'https://www.youtube.com/') {
+                infoBox.textContent = 'ERROR: Please enter a valid YouTube URL.';
+                infoBox.className = 'info-box error';
+                return;
+            }
+
+            // Disable button and show loading
+            downloadBtn.disabled = true;
+            downloadBtn.textContent = '下載中...';
+            infoBox.textContent = '正在處理您的請求...';
+            infoBox.className = 'info-box loading';
+
+            try {
+                const response = await fetch('/download', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: url })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    infoBox.className = 'info-box success';
+                    infoBox.textContent = 
+                        `🎵 標題: ${data.title}\n` +
+                        `⏳ 長度: ${data.length}\n` +
+                        `👤 創作者: ${data.author}\n` +
+                        `📁 檔案: ${data.filename}\n` +
+                        `✅ 下載完成!`;
+                } else {
+                    infoBox.className = 'info-box error';
+                    infoBox.textContent = `ERROR: ${data.error}`;
+                }
+            } catch (error) {
+                infoBox.className = 'info-box error';
+                infoBox.textContent = `ERROR: Network error - ${error.message}`;
+            } finally {
+                // Re-enable button
+                downloadBtn.disabled = false;
+                downloadBtn.textContent = '下載此音樂';
+            }
+        });
+
+        // Allow Enter key to trigger download
+        urlInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                downloadBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>

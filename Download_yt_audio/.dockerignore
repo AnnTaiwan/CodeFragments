@@ -1,0 +1,7 @@
+audios
+docs
+__pycache__/
+*.pyc
+.git/
+.env
+src/yt_download_gui.py

@@ -1,0 +1,10 @@
+# YouTube Audio Downloader Requirements
+
+# YouTube download library (patched version of pytube)
+pytubefix>=6.0.0
+
+# GUI framework (for yt_download_gui_main.py)
+PyQt6>=6.0.0
+
+# Web framework (for yt_download_flask.py)
+Flask>=3.0.0
