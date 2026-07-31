@@ -1,0 +1,14 @@
+profit
+.venv/
+.agents
+.codex
+__pycache__/
+*.py[cod]
+.pytest_cache
+*.json
+*.csv
+test_letterboxd.py
+docs/
+profit/
+AGENTS.md
+CONTEXT.md

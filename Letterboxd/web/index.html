@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Letterboxd Comparison Game</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="screen-texture" aria-hidden="true"></div>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Letterboxd private screening</p>
+          <h1>Comparison Game</h1>
+        </div>
+        <button id="new-list-button" class="secondary hidden" type="button">New list</button>
+      </header>
+
+      <section id="notice" class="notice hidden" role="status" aria-live="polite"></section>
+
+      <section id="load-panel" class="opening-panel">
+        <div class="marquee">
+          <div class="marquee-copy">
+            <p class="eyebrow">Now choosing</p>
+            <h2>Winner stays on.</h2>
+          </div>
+        </div>
+        <div class="panel control-panel">
+          <form id="url-form" class="stack">
+            <label for="list-url">List URL</label>
+            <div class="inline-form">
+              <input
+                id="list-url"
+                name="list-url"
+                type="url"
+                autocomplete="off"
+                placeholder="https://letterboxd.com/ChouAnn/list/2026/"
+                required
+              />
+              <button type="submit">Fetch</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="setup-panel" class="panel hidden">
+        <div class="setup-layout">
+          <div>
+            <p class="eyebrow">Film source loaded</p>
+            <p id="loaded-count" class="setup-count"></p>
+          </div>
+          <form id="size-form" class="stack">
+            <label for="game-size">Films to compare</label>
+            <div class="inline-form compact">
+              <input id="game-size" name="game-size" type="number" min="2" required />
+              <button type="submit">Start</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="game-panel" class="game hidden" aria-live="polite">
+        <div class="game-header">
+          <div>
+            <p class="eyebrow">Head to head</p>
+            <p id="progress" class="status-line"></p>
+          </div>
+          <div class="scoreboard" aria-label="Game status">
+            <div>
+              <span>Field</span>
+              <strong id="field-size-stat">0</strong>
+            </div>
+            <div>
+              <span>Left</span>
+              <strong id="left-role-stat">-</strong>
+            </div>
+            <div>
+              <span>Right</span>
+              <strong id="right-role-stat">-</strong>
+            </div>
+          </div>
+        </div>
+        <div class="versus-line" aria-hidden="true">
+          <span></span>
+          <strong>VS</strong>
+          <span></span>
+        </div>
+        <div class="choice-grid">
+          <button id="left-choice" class="film-choice left-seat" type="button"></button>
+          <button id="right-choice" class="film-choice right-seat" type="button"></button>
+        </div>
+      </section>
+
+      <section id="result-panel" class="panel hidden">
+        <p class="eyebrow">Final selection</p>
+        <div class="result-layout">
+          <div>
+            <h2 class="section-title">Winner</h2>
+            <div id="winner-card" class="winner-card"></div>
+          </div>
+          <div>
+            <h2 class="section-title">Path</h2>
+            <ol id="path-list" class="path-list"></ol>
+          </div>
+        </div>
+        <button id="play-again-button" type="button">Play again</button>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

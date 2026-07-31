@@ -1,0 +1,20 @@
+[project]
+name = "letterboxd"
+version = "0.1.0"
+description = "Python Environment for Letterboxd project."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "letterboxdpy>=6.5.7",
+    "rich>=15.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:Call to deprecated method findChild:DeprecationWarning:letterboxdpy\\.pages\\.user_list",
+]
